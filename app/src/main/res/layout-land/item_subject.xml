@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:elevation="1dp"
+    tools:ignore="UnusedAttribute">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            app:srcCompat="@drawable/ic_favorite_black_24dp"
+            android:id="@+id/imgImage"
+            tools:ignore="ContentDescription,VectorDrawableCompat"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:text="TextViewxcvxcbxbxcbxbx"
+            android:layout_width="230dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtSubjects"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:text="20"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/txtNumber"
+            tools:ignore="HardcodedText"
+            android:textSize="24sp"
+            android:gravity="fill_vertical|center"
+            android:textColor="@color/colorPrimaryDark" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/textView6"
+        android:background="@color/colorPrimaryDark" />
+</LinearLayout>

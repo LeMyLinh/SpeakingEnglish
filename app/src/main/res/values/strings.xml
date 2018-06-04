@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">English Listening And Speaking</string>
+    <string name="menu_translate">Translate</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Translate</string>
+
+</resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:text="20"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/txtSTT"
+            android:textSize="18dp"
+            android:gravity="center|fill_horizontal"
+            tools:ignore="HardcodedText,SpUsage"
+            android:textColor="@android:color/holo_blue_dark" />
+
+        <TextView
+            android:text="TextViewsdaafafafafafaffafafafafafafaffafafa"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txtTopics"
+            android:gravity="fill_horizontal|center"
+            android:textSize="18dp"
+            android:textColor="@android:color/black"
+            tools:ignore="HardcodedText,SpUsage" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_favorite_black_24dp"
+            android:id="@+id/imgBtnStatus"
+            tools:ignore="ContentDescription,InefficientWeight"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_weight="1"
+        tools:ignore="InefficientWeight" />
+
+
+
+
+
+</LinearLayout>
