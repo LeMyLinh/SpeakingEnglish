@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -44,9 +45,19 @@ import com.example.admin.adapter.ConversationAdapter;
 import com.example.admin.model.Conversation;
 import com.example.admin.model.Topic;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.admin.speakingenglishiseasy.Subject_Activity.DATABASE_NAME;
@@ -175,6 +186,10 @@ public class Conversation_Activity extends AppCompatActivity {
             like = false;
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
         }
+
+        // Need to result for NetworkOnMainThreadException
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     @Override
@@ -208,7 +223,7 @@ public class Conversation_Activity extends AppCompatActivity {
         return isConnected;
     }
     private void messageDialog(){
-        dialog.setMessage("Không có kết nối internet");
+        dialog.setMessage("NO internet connection");
         dialog.show();
     }
 
@@ -549,14 +564,20 @@ public class Conversation_Activity extends AppCompatActivity {
     }
     private void changeMp3() {
         mediaPlayer.stop();
+        String pathmp3 = arrTopics.get(position).getPathMp3();
         if(examConnectInternet()){
-            mp3 = arrTopics.get(position).getLinkMp3();
+            if (pathmp3 != null) {
+                mp3 = pathmp3;
+            } else {
+                mp3 = arrTopics.get(position).getLinkMp3();
+            }
+
             setDataSourseMp3InAsytask();
         }else{
             if(isTopic == 1 || isTopic == 2){
                 seekBar.setProgress(0);
             }else if (isTopic == 3){
-                mp3  = arrTopics.get(position).getPathMp3();
+                mp3  = pathmp3;
                 setDataSourseMp3InAsytask();
             }
         }
@@ -666,15 +687,36 @@ public class Conversation_Activity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if(id== R.id.mnuConversation){
-            Toast.makeText(Conversation_Activity.this, "Translate", Toast.LENGTH_SHORT).show();
+            translate("Hello");
         }
 
         return super.onOptionsItemSelected(item);
     }
 
 
+    /** Translate a given text between a source and a destination language */
+    public void translate(String text) {
+        if (examConnectInternet()) {
+            String translated = null;
+            try {
+                String query = URLEncoder.encode(text, "UTF-8");
+                String langpair = URLEncoder.encode(Locale.ENGLISH.getLanguage()+"|"+"Vi", "UTF-8");
+                String url = "http://mymemory.translated.net/api/get?q="+query+"&langpair="+langpair;
+                HttpClient hc = new DefaultHttpClient();
+                HttpGet hg = new HttpGet(url);
 
-
+                HttpResponse hr = hc.execute(hg);
+                if(hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    JSONObject response = new JSONObject(EntityUtils.toString(hr.getEntity()));
+                    translated = response.getJSONObject("responseData").getString("translatedText");
+                    Toast.makeText(Conversation_Activity.this, translated, Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
