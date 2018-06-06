@@ -1,19 +1,15 @@
 package com.example.admin.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.admin.model.Conversation;
-import com.example.admin.speakingenglishiseasy.Conversation_Activity;
 import com.example.admin.speakingenglishiseasy.R;
 
 import java.util.List;
@@ -30,7 +26,6 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
 
     private ImageView imgPersonA, imgPersonB;
     public static TextView txtPersonA, txtPersonB;
-    private ImageButton imgListenSentenceA,imgListenSentenceB;
 
 
     public ConversationAdapter(Activity context, int resource, List<Conversation> objects) {
@@ -51,8 +46,6 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         imgPersonB = (ImageView) item.findViewById(R.id.imgPersonB);
         txtPersonA = (TextView) item.findViewById(R.id.txtPersonA);
         txtPersonB = (TextView) item.findViewById(R.id.txtPersonB);
-        imgListenSentenceA = (ImageButton) item.findViewById(R.id.imgListenSentenceA);
-        imgListenSentenceB = (ImageButton) item.findViewById(R.id.imgListenSentenceB);
 
 
         Conversation conversation = this.objects.get(position);
@@ -64,19 +57,6 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
     }
 
     private void addEvent() {
-        imgListenSentenceA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "volumeA", Toast.LENGTH_SHORT).show();
-            }
-        });
-        imgListenSentenceB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "volumeB", Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
 

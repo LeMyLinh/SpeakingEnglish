@@ -1,17 +1,11 @@
 package com.example.admin.speakingenglishiseasy;
 
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,16 +18,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.admin.adapter.TopicAdapter;
-import com.example.admin.model.Subject;
 import com.example.admin.model.Topic;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-
 
 import static com.example.admin.speakingenglishiseasy.Conversation_Activity.mediaPlayer;
 import static com.example.admin.speakingenglishiseasy.Conversation_Activity.pause;
@@ -74,7 +63,7 @@ public class Topic_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //chỉ cho màn hình xoay bề dọc thôi
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //cách 2 :    android:screenOrientation="portrait" trong <activity>...  />
 
 
@@ -142,7 +131,7 @@ public class Topic_Activity extends AppCompatActivity {
             cursor = database.rawQuery("select * from Topic where Status=?", new String[]{"1"});
         }
         else if (isTopic == 3){
-            cursor  = database.rawQuery("select * from Topic where PathMp3 <> ?", new String[]{"null"});
+            cursor  = database.rawQuery("select * from Topic where PathMp3 != ?", new String[]{"null"});
 
         }
         arrTopics.clear();
@@ -202,15 +191,14 @@ public class Topic_Activity extends AppCompatActivity {
        
         actionBar.setCustomView(item);
         actionBar.setDisplayShowCustomEnabled(true);
-
-
     }
+
     private void addEvent() {
         lvTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        Intent intent = new Intent(Topic_Activity.this, Conversation_Activity.class);
+                Intent intent = new Intent(Topic_Activity.this, Conversation_Activity.class);
                 //intent.putExtra("idTopic",arrTopics.get(position).getIdTopic());
                 //intent.putExtra("mp3",arrTopics.get(position).getLinkMp3());
                 intent.putExtra("topic",arrTopics.get(position));
@@ -243,7 +231,7 @@ public class Topic_Activity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_topic,menu);
+        menuInflater.inflate(R.menu.activity_subject_drawer,menu);
         return true;
     }
 
@@ -251,9 +239,7 @@ public class Topic_Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId(); //this is item user click into
-        if(id == R.id.mnuTopic){
-            Toast.makeText(this, "Translate", Toast.LENGTH_SHORT).show();
-        }
+
         return super.onOptionsItemSelected(item);
     }
 

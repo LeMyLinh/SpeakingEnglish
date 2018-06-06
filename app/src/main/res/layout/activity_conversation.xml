@@ -13,10 +13,11 @@
     tools:context="com.example.admin.speakingenglishiseasy.Conversation_Activity">
 
     <LinearLayout
+        android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="82dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorPrimary"
         tools:targetApi="lollipop"
         android:id="@+id/linearLayoutConversation"
         android:layout_alignParentBottom="true">
@@ -28,6 +29,7 @@
 
             <TextView
                 android:text="00:00"
+                android:textColor="@android:color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:id="@+id/txtTimeBegin"
@@ -37,7 +39,7 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                app:srcCompat="@drawable/ic_file_download_black_24dp"
+                app:srcCompat="@drawable/ic_file_download_white_24dp"
                 android:id="@+id/imgDownload"
                 android:background="@android:color/transparent"
                 tools:ignore="ContentDescription,VectorDrawableCompat" />
@@ -52,7 +54,10 @@
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:id="@+id/seekBar" />
+                android:id="@+id/seekBar"
+                android:progressBackgroundTint="@android:color/white"
+                android:progressTint="@android:color/white"
+                android:thumbTint="@android:color/white"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -67,16 +72,16 @@
                     android:id="@+id/imgNextLeft"
                     android:layout_gravity="left|center"
                     android:background="@android:color/transparent"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded,VectorDrawableCompat" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
+                    app:srcCompat="@drawable/ic_play_circle_outline_white_24dp"
                     android:id="@+id/imgPause"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription,VectorDrawableCompat" />
 
                 <ImageButton
                     android:layout_width="60dp"
@@ -85,7 +90,7 @@
                     android:id="@+id/imgNextRight"
                     android:layout_gravity="right|center"
                     android:background="@android:color/transparent"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded,VectorDrawableCompat" />
 
             </LinearLayout>
         </LinearLayout>
@@ -104,6 +109,7 @@
 
                 <TextView
                     android:text="00:00"
+                    android:textColor="@android:color/white"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:id="@+id/txtTimeEnd"
@@ -121,10 +127,10 @@
                 <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_autorenew_black_24dp"
+                    app:srcCompat="@drawable/ic_autorenew_white_24dp"
                     android:id="@+id/imgRelease"
                     android:background="@android:color/transparent"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription,VectorDrawableCompat" />
 
             </LinearLayout>
         </LinearLayout>

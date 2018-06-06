@@ -14,13 +14,14 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_perm_identity_black_24dp"
+            app:srcCompat="@drawable/ic_person_girl_24dp"
             android:id="@+id/imgPersonB"
             tools:ignore="ContentDescription,VectorDrawableCompat"
 
             android:layout_gravity="center|left" />
 
         <TextView
+            android:layout_marginLeft="10dp"
             android:text="fdfdfdffffffffffffffffffffffffffffffffffffffff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,15 +30,6 @@
             android:textSize="18dp"
             tools:ignore="HardcodedText,InefficientWeight,SpUsage" />
 
-
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_mic_none_black_24dp"
-                android:id="@+id/imgListenSentenceA"
-                tools:ignore="ContentDescription"
-                android:layout_gravity="center|right"
-                android:background="@android:color/transparent" />
 
     </LinearLayout>
 
@@ -49,12 +41,13 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_person_outline_black_24dp"
+            app:srcCompat="@drawable/ic_person_boy_24dp"
             android:id="@+id/imgPersonA"
             android:contentDescription=""
             android:layout_gravity="center|left"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,VectorDrawableCompat" />
         <TextView
+            android:layout_marginLeft="10dp"
             android:text="ggsg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -63,15 +56,6 @@
             android:textSize="18dp"
             tools:ignore="HardcodedText,InefficientWeight,SpUsage" />
 
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_mic_none_black_24dp"
-                android:id="@+id/imgListenSentenceB"
-                tools:ignore="ContentDescription"
-                android:layout_gravity="center|right"
-                android:background="@android:color/transparent" />
 
     </LinearLayout>
 

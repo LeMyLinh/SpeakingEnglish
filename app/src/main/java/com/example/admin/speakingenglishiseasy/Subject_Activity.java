@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,15 +46,15 @@ public class Subject_Activity extends AppCompatActivity
     String DB_PATH_SUFFIX = "/databases/"; // thư mục lưu file cơ sở dữ liệu
     public static SQLiteDatabase database = null; // class cho phép tương tác database
 
-    public  static  int isTopic = 1; // nếu =  1 : màn hình subject mở màn hình topic
-                              //  nếu =  2 : màn hình like mở màn hình topic
-                                // nếu = 3 :  activity download  will open activity topic
+    public  static  int isTopic = 1;    // nếu =  1 : topic of subject
+                                        // nếu =  2 : liked
+                                        // nếu =  3 : downloaded
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
-         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //chỉ cho màn hình xoay bề dọc thôi
+         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //cách 2 :    android:screenOrientation="portrait" trong <activity>...  />
 
 
@@ -96,13 +95,13 @@ public class Subject_Activity extends AppCompatActivity
     }
 
     private void querySelectDatabase() {
-          // Bước 1 : mở CSDL
+        // Bước 1 : mở CSDL
         //lệnh bên dưới ko null
         database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE,null);
-         //B2 : có thể dùng query or rawQuery
+        //B2 : có thể dùng query or rawQuery
         Cursor cursor =  database.query("Subject",null,null,null,null,null,null);
-       // Cursor cursor = database.rawQuery("SELECT * FROM Subject",null);
-        arrSubject.clear(); //xóa cái cũ đi
+        // Cursor cursor = database.rawQuery("SELECT * FROM Subject",null);
+        arrSubject.clear();
         //trong khi dg di chuyển tới dòng kế tiếp trong bảng
 
 
@@ -156,7 +155,7 @@ public class Subject_Activity extends AppCompatActivity
                      myOuput.write(buffer,0,length);
 
                  }
-                 //nếu không đóng file thì dung lượng data = 0
+                 //đóng file để hoàn tất
 
                  myOuput.flush();
                  myOuput.close();
@@ -221,28 +220,6 @@ public class Subject_Activity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.subject_, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(this, "Translate", Toast.LENGTH_SHORT).show();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

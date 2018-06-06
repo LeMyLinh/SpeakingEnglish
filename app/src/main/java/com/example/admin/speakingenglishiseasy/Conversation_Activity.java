@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -26,7 +25,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,7 +81,7 @@ public class Conversation_Activity extends AppCompatActivity {
     private   ActionBar actionBar;
     private ProgressDialog dialog;
     private String nameOfFile = null;
-    private boolean returnConectityLast = false;//Kiểm chuyển từ states không kết nối sang kết nối (true) or ngược lại(false)
+    private boolean returnConectityLast = false;
     private ProgressDialog dialog1;
     private String pathMp3 ;
     private boolean isEventPause = false;
@@ -94,9 +92,7 @@ public class Conversation_Activity extends AppCompatActivity {
     private  Handler handlerReplease = null;
     private  boolean isReplease = false;
 
-    //document : http://laptrinhandroid.edu.vn/huong-dan-su-dung-thread-va-handler-trong-android/
-    //  http://www.androidhive.info/2012/03/android-building-audio-player-tutorial/#27
-    //https://thangcoder.com/lap-trinh-android/hoc-lap-trinh-android-can-ban/huong-dan-luu-tru-va-clone-code-tren-github-tren-android-studio
+
     private  class  MyTask extends AsyncTask<Void,Void,Integer>{
         @Override
         protected void onPreExecute() {
@@ -155,13 +151,14 @@ public class Conversation_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED); //khóa xoay lại
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         //cách 2 :    android:screenOrientation="locked" trong <activity>...  />
 
         getDataFromActivityOther();
         addControl();
         querySelectDatabase();
-        if(!examConnectInternet() && isTopic == 3){
+
+        if (pathMp3 != null) {
             mp3 = pathMp3;
         }
 
@@ -170,15 +167,13 @@ public class Conversation_Activity extends AppCompatActivity {
         addActionBar();
         addEvent();
 
-        if( isTopic==1 && topic.isStatus()) {
+        if( topic.isStatus()) {
             like = true;
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
-        }
-        else if(isTopic == 2){
-
-        }
-        else if(isTopic == 3){
-
+        } else
+        {
+            like = false;
+            imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
         }
     }
 
@@ -224,7 +219,7 @@ public class Conversation_Activity extends AppCompatActivity {
         }else {
             if(isTopic == 1 || isTopic == 2){
                 returnConectityLast = true;
-                imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
+                imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_24dp));
             }else if(isTopic == 3){
                 playMp3HaveInternetOrOffline(timeEnd);
             }
@@ -251,7 +246,7 @@ public class Conversation_Activity extends AppCompatActivity {
         }
         else {
             pause = false;
-            imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
+            imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_24dp));
             mediaPlayer.pause();
         }
     }
@@ -268,7 +263,6 @@ public class Conversation_Activity extends AppCompatActivity {
         IdTopic = topic.getIdTopic();
         position = intent.getIntExtra("position",-1);
         pathMp3 = topic.getPathMp3();
-
     }
 
     private void addActionBar() {
@@ -306,10 +300,9 @@ public class Conversation_Activity extends AppCompatActivity {
         imgPause = (ImageButton) findViewById(R.id.imgPause);
         imgRelease = (ImageButton) findViewById(R.id.imgRelease);
 
-        imgNextRight.setColorFilter(Color.parseColor("#FF4F5253"));
+
         imgNextRight.setMaxHeight(40);
         imgNextRight.setMaxWidth(60);
-        imgNextLeft.setColorFilter(Color.parseColor("#FF4F5253"));
         imgNextLeft.setMaxHeight(40);
         imgNextLeft.setMaxWidth(60);
 
@@ -384,7 +377,6 @@ public class Conversation_Activity extends AppCompatActivity {
                 startColorAnimation(v);
                 animationClick(v);
                 examResetVolume();
-
             }
         });
         imgBackConversation.setOnClickListener(new View.OnClickListener() {
@@ -427,8 +419,11 @@ public class Conversation_Activity extends AppCompatActivity {
             public void onClick(View v) {
                 startColorAnimation(v);
                 animationClick(v);
-                if(examConnectInternet()){
-                    downloadMp3();
+                if (pathMp3 == null) {
+                    if(examConnectInternet()){
+                        downloadMp3();
+                        imgDownload.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+                    }
                 }
             }
         });
@@ -444,7 +439,6 @@ public class Conversation_Activity extends AppCompatActivity {
     }
 
     private void downloadMp3() {
-        //phải sửa lại cái down loadmanger
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mp3));
         request.setTitle("File download");
 
@@ -481,6 +475,8 @@ public class Conversation_Activity extends AppCompatActivity {
                     if(cur.getInt(index) == DownloadManager.STATUS_SUCCESSFUL){
                         dialog.dismiss();
                         getPathMp3InSystem();
+                        imgDownload.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_white_24dp));
+                        Toast.makeText(Conversation_Activity.this, "Download successful. Added to Download", Toast.LENGTH_SHORT).show();
                     }
                 }
                 cur.close();
@@ -499,24 +495,8 @@ public class Conversation_Activity extends AppCompatActivity {
         File files[] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
         if(files.length > 0){
             for(int i =0 ;i<files.length ;i++){
-                if(files[i].getName().equals("Audio")){
-                    File fileMp3[] = files[i].listFiles();
-                    if(fileMp3.length > 0){
-                        for(int j=0;j<fileMp3.length;j++){
-                            String nameFile = URLUtil.guessFileName(fileMp3[j].getAbsolutePath(),null,
-                                    MimeTypeMap.getFileExtensionFromUrl(fileMp3[j].getAbsolutePath()));
-
-                            if(nameFile.equals(nameOfFile)){ // đuôi của file
-
-                                updatePathMp3IntoSqlite(fileMp3[j].getAbsolutePath());
-                            }
-                        }
-                    }else{
-                        Log.e("MESSAGE","HAVE NOT FILE MP3");
-                    }
-
-                    break;
-
+                if(files[i].getName().equals(nameOfFile)){
+                    updatePathMp3IntoSqlite(files[i].getAbsolutePath());
                 }
             }
         }
@@ -584,15 +564,17 @@ public class Conversation_Activity extends AppCompatActivity {
     }
     private void changeStatusLike() {
         if(arrTopics.get(position).isStatus()){
+            like = true;
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         }else{
+            like = false;
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
         }
     }
     private void changeResetVolume() {
         if(replaceColorVolume){
             replaceColorVolume = false;
-            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_black_24dp));
+            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_white_24dp));
         }
     }
 
@@ -600,11 +582,11 @@ public class Conversation_Activity extends AppCompatActivity {
         if(!like){
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
             like = true;
-            Toast.makeText(Conversation_Activity.this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_LONG).show();
+            Toast.makeText(Conversation_Activity.this, "Added to Like", Toast.LENGTH_SHORT).show();
         }else{
             like = false;
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
-            Toast.makeText(Conversation_Activity.this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_LONG).show();
+            Toast.makeText(Conversation_Activity.this, "Removed from Like", Toast.LENGTH_SHORT).show();
 
         }
         updateDataInTableTopic();
@@ -612,19 +594,19 @@ public class Conversation_Activity extends AppCompatActivity {
     private void updateDataInTableTopic() {
         ContentValues values  = new ContentValues();
         values.put("Status",like);
-        int up = database.update("Topic",values,"IdTopic=?",new String[]{String.valueOf(IdTopic)});
+        database.update("Topic",values,"IdTopic=?",new String[]{String.valueOf(IdTopic)});
 
     }
 
     private void examResetVolume() {
         if(!replaceColorVolume){
             replaceColorVolume = true;
-            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_black_red_24dp));
+            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_black_24dp));
 
         }
         else{
             replaceColorVolume = false;
-            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_black_24dp));
+            imgRelease.setImageDrawable(getResources().getDrawable(R.drawable.ic_autorenew_white_24dp));
         }
 
     }
@@ -646,10 +628,9 @@ public class Conversation_Activity extends AppCompatActivity {
                 seekBar.setProgress(mediaPlayer.getCurrentPosition());
                 seekBar.postDelayed(this,100);
                 if(!mediaPlayer.isPlaying()){// not run!
-                    imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
-
+                    imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_24dp));
                 }else{
-                    imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
+                    imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_circle_outline_white_24dp));
                 }
 
             }
@@ -684,7 +665,6 @@ public class Conversation_Activity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id== R.id.mnuConversation){
             Toast.makeText(Conversation_Activity.this, "Translate", Toast.LENGTH_SHORT).show();
