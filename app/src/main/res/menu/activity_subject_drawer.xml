@@ -16,7 +16,7 @@
                 />
             <item
                 android:id="@+id/nav_like"
-                android:icon="@drawable/ic_favorite_black_24dp"
+                android:icon="@drawable/ic_favorite_black_black_24dp"
                 android:title="Like"
                 tools:ignore="HardcodedText"
                 />
@@ -29,11 +29,11 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share app" />
+                android:title="Share" />
             <item
                 android:id="@+id/nav_rate"
                 android:icon="@drawable/ic_menu_star"
-                android:title="Rate app" />
+                android:title="Rate" />
         </menu>
     </item>
 
