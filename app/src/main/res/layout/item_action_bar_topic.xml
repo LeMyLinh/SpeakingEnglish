@@ -14,7 +14,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/imgBackTopic"
-            android:background="@drawable/ic_arrow_back_black_24dp"/>
+            android:background="@drawable/ic_arrow_back_white_24dp"
+            />
+
     </LinearLayout>
 
 
@@ -24,12 +26,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtAcbTopic"
         android:layout_weight="1"
-        android:textSize="18dp"
+        android:maxLines="1"
+        android:textSize="30dp"
         android:textAllCaps="true"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
 </LinearLayout>

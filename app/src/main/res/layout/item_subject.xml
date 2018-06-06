@@ -24,13 +24,13 @@
             android:layout_height="80dp" />
 
         <TextView
-            android:text="TextViewxcvxcbxbxcbxbx"
-            android:layout_width="172dp"
+            android:text="TextViewxcvxcbasdasdasdasdasdxbxcbxbx"
+            android:layout_width="220dp"
             android:layout_height="match_parent"
             android:id="@+id/txtSubjects"
             android:textSize="18sp"
             tools:ignore="HardcodedText"
-            android:layout_gravity="center"
+            android:layout_gravity="center|fill_horizontal"
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textAllCaps="false"
@@ -43,8 +43,8 @@
             android:id="@+id/txtNumber"
             tools:ignore="HardcodedText"
             android:textSize="14sp"
-            android:gravity="fill_vertical|center"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:gravity="center"
+            android:textColor="@color/colorAccent" />
 
     </LinearLayout>
 

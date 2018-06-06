@@ -4,6 +4,7 @@ package com.example.admin.speakingenglishiseasy;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -20,12 +21,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,7 +50,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 
 import static com.example.admin.speakingenglishiseasy.Subject_Activity.DATABASE_NAME;
 import static com.example.admin.speakingenglishiseasy.Subject_Activity.database;
@@ -338,7 +337,7 @@ public class Conversation_Activity extends AppCompatActivity {
 
         int colorStart = v.getSolidColor();
         int colorEnd = 0xFFFF0000;
-        ValueAnimator valueAnimator = ObjectAnimator.ofInt(v,"ColorFilter",colorStart,colorEnd);
+        @SuppressLint("ObjectAnimatorBinding") ValueAnimator valueAnimator = ObjectAnimator.ofInt(v,"ColorFilter",colorStart,colorEnd);
         valueAnimator.setDuration(500);
         valueAnimator.setEvaluator(new ArgbEvaluator());
         valueAnimator.setRepeatCount(1);
@@ -587,7 +586,7 @@ public class Conversation_Activity extends AppCompatActivity {
         if(arrTopics.get(position).isStatus()){
             imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         }else{
-            imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
         }
     }
     private void changeResetVolume() {
@@ -604,7 +603,7 @@ public class Conversation_Activity extends AppCompatActivity {
             Toast.makeText(Conversation_Activity.this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_LONG).show();
         }else{
             like = false;
-            imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            imgLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
             Toast.makeText(Conversation_Activity.this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_LONG).show();
 
         }

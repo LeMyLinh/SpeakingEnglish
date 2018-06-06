@@ -14,8 +14,6 @@ import com.example.admin.speakingenglishiseasy.R;
 
 import java.util.List;
 
-import static com.example.admin.speakingenglishiseasy.Subject_Activity.isTopic;
-
 /**
  * Created by admin on 7/25/2017.
  */
@@ -56,7 +54,7 @@ public class TopicAdapter extends ArrayAdapter<Topic> {
         if(status){
             imgBtnStatus.setImageDrawable(this.context.getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         }else{
-            imgBtnStatus.setImageDrawable(this.context.getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            imgBtnStatus.setImageDrawable(this.context.getResources().getDrawable(R.drawable.ic_favorite_border_primary_24dp));
         }
 
        /* if(isTopic == 1 || isTopic == 3){
