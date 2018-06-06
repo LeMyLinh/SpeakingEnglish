@@ -200,7 +200,7 @@ public class Subject_Activity extends AppCompatActivity
                      byte[] b = baos.toByteArray();
                      intent.putExtra("image",b);*/
                      isTopic = 1;
-                     startActivityForResult(intent,35);
+                     startActivity(intent);
                  }
              });
     }
@@ -229,20 +229,21 @@ public class Subject_Activity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the home action
+            // Current on home, so do not do anything
         } else if (id == R.id.nav_like) {
             isTopic = 2;
             Intent intent = new Intent(Subject_Activity.this,Topic_Activity.class);
-            startActivityForResult(intent,12);
+            startActivity(intent);
 
         } else if (id == R.id.nav_download) {
             isTopic = 3;
             Intent intent = new Intent(Subject_Activity.this,Topic_Activity.class);
-            startActivityForResult(intent,13);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
             shareApp();
 
-        } else if (id == R.id.ic_menu_star) {
+        } else if (id == R.id.nav_rate) {
             rateApp();
         }
 
@@ -276,8 +277,7 @@ public class Subject_Activity extends AppCompatActivity
     }
 
     private void shareApp() {
-
-         Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain"); //send by text/plain
         String contentSend = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
         shareIntent.putExtra(Intent.EXTRA_SUBJECT,"English listening and speaking");

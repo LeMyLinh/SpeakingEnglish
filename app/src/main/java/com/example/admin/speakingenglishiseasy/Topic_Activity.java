@@ -1,8 +1,11 @@
 package com.example.admin.speakingenglishiseasy;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -73,13 +76,8 @@ public class Topic_Activity extends AppCompatActivity {
             subject =  intent.getStringExtra("Subject");
             idSubject = intent.getStringExtra("idSubject");
             numberTopic = intent.getIntExtra("numberTopic",-1);
-            //imgSubject = intent.getByteArrayExtra("image");
-        } else if(isTopic == 2){
-           // Toast.makeText(Topic_Activity.this, "Topic_Activity", Toast.LENGTH_SHORT).show();
         }
-        else if(isTopic == 3){
-             //Toast.makeText(Topic_Activity.this, "Topic_Activity", Toast.LENGTH_SHORT).show();
-        }
+
 
         addControl();
         querySeLectAll();
@@ -90,35 +88,23 @@ public class Topic_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-      //if(like ){
-         querySeLectAll();
-        //Toast.makeText(Topic_Activity.this, "onResume", Toast.LENGTH_SHORT).show();
-      //}
-
-
+        querySeLectAll();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //Toast.makeText(Topic_Activity.this, "onPause", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-          if(requestCode == 99 && resultCode == 33){
-             // querySeLectAll();
-          }
     }
     private void addControl() {
         lvTopics = (ListView) findViewById(R.id.lvTopics);
         arrTopics = new ArrayList<>();
         topicAdapter =new TopicAdapter(Topic_Activity.this,R.layout.item_topic,arrTopics);
         lvTopics.setAdapter(topicAdapter);
-
-        //arrIdTopic = new ArrayList<>();
-        //arrMp3 = new ArrayList<>();
 
     }
     private void querySeLectAll() {
@@ -132,8 +118,8 @@ public class Topic_Activity extends AppCompatActivity {
         }
         else if (isTopic == 3){
             cursor  = database.rawQuery("select * from Topic where PathMp3 != ?", new String[]{"null"});
-
         }
+
         arrTopics.clear();
         int i = 1;
         while(cursor.moveToNext()){
@@ -143,32 +129,19 @@ public class Topic_Activity extends AppCompatActivity {
             status =  (cursor.getShort(3) != 0);
             linkMp3 = cursor.getString(4);
             pathMp3 = cursor.getString(5);
-            Topic topic = null;
-            //if(isTopic == 1){
-                topic= new Topic(i,idTopics,idSubject,topics,status,linkMp3,pathMp3);
-/*
-        }else if(isTopic == 2){
-            topic= new Topic(i,idTopics,topics,status,linkMp3);
-        }else if(isTopic == 3){
-            topic = new Topic(i,idTopics,topics,pathMp3);
-        }*/
 
-            arrTopics.add(topic);
-            // arrIdTopic.add(idTopics);
-            // arrMp3.add(linkMp3);
+            arrTopics.add(new Topic(i,idTopics,idSubject,topics,status,linkMp3,pathMp3));
             i++;
         }
 
         cursor.close();
         topicAdapter.notifyDataSetChanged();
-
     }
     private void animationClick(View v){
         Animation animation = AnimationUtils.loadAnimation(Topic_Activity.this,R.anim.bounce);
         v.startAnimation(animation);
     }
     private void addActionBar() {
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -178,11 +151,9 @@ public class Topic_Activity extends AppCompatActivity {
 
         txtAcbTopic = (TextView) item.findViewById(R.id.txtAcbTopic);
         imgBackTopic = (ImageButton) item.findViewById(R.id.imgBackTopic);
-       // imgImage = (ImageView) item.findViewById(R.id.imgSubject);
 
         if(isTopic == 1){
             txtAcbTopic.setText(subject);
-            // imgImage.setImageBitmap(BitmapFactory.decodeByteArray(imgSubject,0,imgSubject.length));
         }else if(isTopic == 2){
             txtAcbTopic.setText("LIKE");
         }else if(isTopic == 3){
@@ -199,28 +170,21 @@ public class Topic_Activity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(Topic_Activity.this, Conversation_Activity.class);
-                //intent.putExtra("idTopic",arrTopics.get(position).getIdTopic());
-                //intent.putExtra("mp3",arrTopics.get(position).getLinkMp3());
                 intent.putExtra("topic",arrTopics.get(position));
-                intent.putExtra("position",position);//vị trí trong listview
-                //intent.putExtra("numberTopics",numberTopic);
-                //intent.putExtra("status",arrTopics.get(position));
+                intent.putExtra("position",position);
 
-                //Toast.makeText(Topic_Activity.this, String.valueOf(arrIdTopic.get(position)), Toast.LENGTH_SHORT).show();
                 if(pause){
                     mediaPlayer.stop();
                     pause = false;
                 }
-                startActivityForResult(intent,99);
-
-
+                startActivity(intent);
             }
         });
+
         imgBackTopic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animationClick(v);
-                setResult(53);
                 finish();
             }
         });
@@ -237,11 +201,63 @@ public class Topic_Activity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId(); //take id that user click into
 
-        int id = item.getItemId(); //this is item user click into
+        if (id == R.id.nav_home) {
+            Intent intent = new Intent(Topic_Activity.this,Subject_Activity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_like) {
+            isTopic = 2;
+            querySeLectAll();
+            addActionBar();
+
+        } else if (id == R.id.nav_download) {
+            isTopic = 3;
+            querySeLectAll();
+            addActionBar();
+
+        } else if (id == R.id.nav_share) {
+            shareApp();
+
+        } else if (id == R.id.nav_rate) {
+            rateApp();
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void rateApp() {
+        Uri uri = Uri.parse("market://details?id=" + getBaseContext().getPackageName() /*"com.vn.dic.e.v.ui"*/);
+        Intent gotoMaket = new Intent(Intent.ACTION_VIEW,uri);
+        int flags;
+        if (Build.VERSION.SDK_INT >= 21)
+        {
+            flags = Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+        }
+        else
+        {
+            //noinspection deprecation
+            flags = Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+        }
+        gotoMaket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | flags |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(gotoMaket);
+        }catch (ActivityNotFoundException e){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id="+getBaseContext().getPackageName())));
 
+        }
+    }
+
+    private void shareApp() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain"); //send by text/plain
+        String contentSend = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"English listening and speaking");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,contentSend);
+        startActivity(Intent.createChooser(shareIntent,"Share"));
+    }
 }

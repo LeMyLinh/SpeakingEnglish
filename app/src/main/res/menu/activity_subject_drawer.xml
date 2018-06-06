@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
      >
-    <item android:title="Goto"
+    <item android:title=""
         tools:ignore="HardcodedText"
         android:icon="@drawable/ic_menu_white_24dp"
         app:showAsAction="ifRoom">
@@ -22,7 +22,7 @@
                 />
             <item
                 android:id="@+id/nav_download"
-                android:icon="@drawable/ic_file_download_white_24dp"
+                android:icon="@drawable/ic_file_download_black_24dp"
                 android:title="Download"
                 tools:ignore="HardcodedText"
                 />
@@ -31,7 +31,7 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share app" />
             <item
-                android:id="@+id/ic_menu_star"
+                android:id="@+id/nav_rate"
                 android:icon="@drawable/ic_menu_star"
                 android:title="Rate app" />
         </menu>
