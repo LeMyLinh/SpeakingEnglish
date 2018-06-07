@@ -121,7 +121,7 @@ public class Conversation_Activity extends AppCompatActivity {
                 setDataSourseMp3();
                 mediaPlayer.start();
             }
-            return mediaPlayer.getDuration();
+            return mediaPlayer.getDuration() > 0 ? mediaPlayer.getDuration() : 0; // fix for set text of timeEnd
         }
         @Override
         protected void onPostExecute(Integer integer) {
@@ -136,9 +136,10 @@ public class Conversation_Activity extends AppCompatActivity {
                 isEventNextRight = false;
             }
             else {
-                    isEventPause = false;
-                    examplayMP3(integer);
+                isEventPause = false;
+                playMp3HaveInternetOrOffline(integer);
             }
+
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
@@ -214,7 +215,7 @@ public class Conversation_Activity extends AppCompatActivity {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if(!isConnected){
-            if(isTopic == 1 || isTopic == 2){
+            if((isTopic == 1 || isTopic == 2) && pathMp3 == null){
                 messageDialog();
             }
         }else{
@@ -225,20 +226,6 @@ public class Conversation_Activity extends AppCompatActivity {
     private void messageDialog(){
         dialog.setMessage("NO internet connection");
         dialog.show();
-    }
-
-    private  void examplayMP3(int timeEnd){
-
-        if(examConnectInternet() ){
-            playMp3HaveInternetOrOffline(timeEnd);
-        }else {
-            if(isTopic == 1 || isTopic == 2){
-                returnConectityLast = true;
-                imgPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_24dp));
-            }else if(isTopic == 3){
-                playMp3HaveInternetOrOffline(timeEnd);
-            }
-        }
     }
 
     private void playMp3HaveInternetOrOffline(int timeEnd) {
@@ -564,24 +551,21 @@ public class Conversation_Activity extends AppCompatActivity {
     }
     private void changeMp3() {
         mediaPlayer.stop();
-        String pathmp3 = arrTopics.get(position).getPathMp3();
-        if(examConnectInternet()){
-            if (pathmp3 != null) {
-                mp3 = pathmp3;
-            } else {
-                mp3 = arrTopics.get(position).getLinkMp3();
-            }
+        pathMp3 = arrTopics.get(position).getPathMp3();
 
-            setDataSourseMp3InAsytask();
-        }else{
-            if(isTopic == 1 || isTopic == 2){
-                seekBar.setProgress(0);
-            }else if (isTopic == 3){
-                mp3  = pathmp3;
-                setDataSourseMp3InAsytask();
-            }
+        if (pathMp3 != null) {
+            mp3 = pathMp3;
+        } else {
+            mp3 = arrTopics.get(position).getLinkMp3();
         }
 
+        setDataSourseMp3InAsytask();
+
+        if(!examConnectInternet()){
+            if(isTopic == 1 || isTopic == 2) {
+                seekBar.setProgress(0);
+            }
+        }
     }
     private void changeStatusLike() {
         if(arrTopics.get(position).isStatus()){
@@ -689,7 +673,7 @@ public class Conversation_Activity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id== R.id.mnuConversation){
-            translate("Hello");
+            translate("My name is K");
         }
 
         return super.onOptionsItemSelected(item);
