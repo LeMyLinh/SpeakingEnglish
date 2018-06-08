@@ -15,25 +15,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
         <activity
             android:name=".Subject_Activity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Topic_Activity"
-
-           />
+        <activity android:name=".Topic_Activity" />
         <activity android:name=".Conversation_Activity"
             android:configChanges="keyboardHidden|orientation">
-
         </activity>
+
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider996755457142972"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
     </application>
 
 </manifest>

@@ -24,6 +24,9 @@ import android.widget.TextView;
 
 import com.example.admin.adapter.TopicAdapter;
 import com.example.admin.model.Topic;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,7 @@ import static com.example.admin.speakingenglishiseasy.Subject_Activity.isTopic;
 
 public class Topic_Activity extends AppCompatActivity {
 
+    ShareDialog shareDialog;
 
     public static    ArrayList<Topic> arrTopics;
     private  TopicAdapter topicAdapter;
@@ -106,6 +110,7 @@ public class Topic_Activity extends AppCompatActivity {
         topicAdapter =new TopicAdapter(Topic_Activity.this,R.layout.item_topic,arrTopics);
         lvTopics.setAdapter(topicAdapter);
 
+        shareDialog = new ShareDialog(this);
     }
     private void querySeLectAll() {
         database = openOrCreateDatabase(DATABASE_NAME,MODE_PRIVATE,null);
@@ -253,11 +258,15 @@ public class Topic_Activity extends AppCompatActivity {
     }
 
     private void shareApp() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain"); //send by text/plain
-        String contentSend = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"English listening and speaking");
-        shareIntent.putExtra(Intent.EXTRA_TEXT,contentSend);
-        startActivity(Intent.createChooser(shareIntent,"Share"));
+        String url = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
+        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(url))
+                .setQuote("This app is so useful!")
+                .setShareHashtag(new ShareHashtag.Builder().setHashtag("#GodEnglishAPP").build())
+                .build();
+
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            shareDialog.show(linkContent);
+        }
     }
 }

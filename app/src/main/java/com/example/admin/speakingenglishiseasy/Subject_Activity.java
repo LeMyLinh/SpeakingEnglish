@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.example.admin.adapter.SubjectAdapter;
 import com.example.admin.model.Subject;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +44,8 @@ public class Subject_Activity extends AppCompatActivity
     private ArrayList<Subject> arrSubject;
     private SubjectAdapter subjectAdapter;
     private ListView lvSubject;
+
+    private ShareDialog shareDialog;
 
     public static String DATABASE_NAME ="SpeakingEnglishIsEasy.sqlite"; // tên cơ sở dữ liệu
     String DB_PATH_SUFFIX = "/databases/"; // thư mục lưu file cơ sở dữ liệu
@@ -182,9 +187,8 @@ public class Subject_Activity extends AppCompatActivity
         subjectAdapter= new SubjectAdapter(Subject_Activity.this,R.layout.item_subject,arrSubject);
         lvSubject.setAdapter(subjectAdapter);
 
+        shareDialog = new ShareDialog(this);
     }
-
-
 
 
     private void addEvent() {
@@ -277,14 +281,15 @@ public class Subject_Activity extends AppCompatActivity
     }
 
     private void shareApp() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain"); //send by text/plain
-        String contentSend = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"English listening and speaking");
-        shareIntent.putExtra(Intent.EXTRA_TEXT,contentSend);
-        startActivity(Intent.createChooser(shareIntent,"Share"));
+        String url = "https://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName();
+        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(url))
+                .setQuote("This app is so useful!")
+                .setShareHashtag(new ShareHashtag.Builder().setHashtag("#GodEnglishAPP").build())
+                .build();
 
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            shareDialog.show(linkContent);
+        }
     }
-
-
 }
