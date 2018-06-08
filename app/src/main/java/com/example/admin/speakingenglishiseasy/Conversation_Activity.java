@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -24,12 +25,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -45,19 +45,9 @@ import com.example.admin.adapter.ConversationAdapter;
 import com.example.admin.model.Conversation;
 import com.example.admin.model.Topic;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.admin.speakingenglishiseasy.Subject_Activity.DATABASE_NAME;
@@ -70,6 +60,7 @@ public class Conversation_Activity extends AppCompatActivity {
 
     public  static   int IdTopic;
     public  static  boolean like = false;
+
     private  String mp3;
 
     private ListView lvConversation;
@@ -81,7 +72,7 @@ public class Conversation_Activity extends AppCompatActivity {
     private Topic topic = null;
     private TextView txtTimeBegin,txtTimeEnd;
     private SeekBar seekBar = null;
-    private ImageButton imgDownload,imgNextLeft,imgPause,imgNextRight,imgRelease,imgTranslate;
+    private ImageButton imgDownload,imgNextLeft,imgPause,imgNextRight,imgRelease;
     public  static   MediaPlayer mediaPlayer = null;
     public  static  boolean pause = false;
     private  Handler handler = new Handler();
@@ -100,8 +91,7 @@ public class Conversation_Activity extends AppCompatActivity {
     private MyTask myTask = null;
     private boolean isEventNextLeft = false;
     private boolean isEventNextRight = false;
-    private  Handler handlerReplease = null;
-    private  boolean isReplease = false;
+
 
 
     private  class  MyTask extends AsyncTask<Void,Void,Integer>{
@@ -196,7 +186,8 @@ public class Conversation_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean isConected = examConnectInternet();
+
+        examConnectInternet();
     }
     @Override
     protected void onPause() {
@@ -216,17 +207,13 @@ public class Conversation_Activity extends AppCompatActivity {
                 activeNetwork.isConnectedOrConnecting();
         if(!isConnected){
             if((isTopic == 1 || isTopic == 2) && pathMp3 == null){
-                messageDialog();
+                createNetErrorDialog();
             }
-        }else{
-            dialog.dismiss();
         }
+
         return isConnected;
     }
-    private void messageDialog(){
-        dialog.setMessage("NO internet connection");
-        dialog.show();
-    }
+
 
     private void playMp3HaveInternetOrOffline(int timeEnd) {
         if(!pause ){
@@ -661,46 +648,37 @@ public class Conversation_Activity extends AppCompatActivity {
         ));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_conversation,menu);
-        return true;
-    }
+    public void createNetErrorDialog() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You need internet connection for this conversation. Please turn on Mobile Network or Wi-Fi in Settings.")
+                .setTitle("Unable to connect")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(i);
 
-        if(id== R.id.mnuConversation){
-            translate("My name is K");
-        }
+                                dialog.cancel();
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
 
-        return super.onOptionsItemSelected(item);
-    }
+                                mediaPlayer.stop();
+                                myTask.cancel(true);
 
+                                Conversation_Activity.this.finish();
+                            }
+                        }
+                );
 
-    /** Translate a given text between a source and a destination language */
-    public void translate(String text) {
-        if (examConnectInternet()) {
-            String translated = null;
-            try {
-                String query = URLEncoder.encode(text, "UTF-8");
-                String langpair = URLEncoder.encode(Locale.ENGLISH.getLanguage()+"|"+"Vi", "UTF-8");
-                String url = "http://mymemory.translated.net/api/get?q="+query+"&langpair="+langpair;
-                HttpClient hc = new DefaultHttpClient();
-                HttpGet hg = new HttpGet(url);
-
-                HttpResponse hr = hc.execute(hg);
-                if(hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    JSONObject response = new JSONObject(EntityUtils.toString(hr.getEntity()));
-                    translated = response.getJSONObject("responseData").getString("translatedText");
-                    Toast.makeText(Conversation_Activity.this, translated, Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

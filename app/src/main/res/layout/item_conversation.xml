@@ -15,9 +15,8 @@
             android:layout_width="40dp"
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_person_girl_24dp"
-            android:id="@+id/imgPersonB"
+            android:id="@+id/imgPersonA"
             tools:ignore="ContentDescription,VectorDrawableCompat"
-
             android:layout_gravity="center|left" />
 
         <TextView
@@ -30,6 +29,12 @@
             android:textSize="18dp"
             tools:ignore="HardcodedText,InefficientWeight,SpUsage" />
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|right"
+            android:id="@+id/imgTranslateA"
+            android:src="@drawable/ic_translate_black_24dp"/>
 
     </LinearLayout>
 
@@ -42,7 +47,7 @@
             android:layout_width="40dp"
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_person_boy_24dp"
-            android:id="@+id/imgPersonA"
+            android:id="@+id/imgPersonB"
             android:contentDescription=""
             android:layout_gravity="center|left"
             tools:ignore="ContentDescription,VectorDrawableCompat" />
@@ -56,6 +61,12 @@
             android:textSize="18dp"
             tools:ignore="HardcodedText,InefficientWeight,SpUsage" />
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|right"
+            android:id="@+id/imgTranslateB"
+            android:src="@drawable/ic_translate_black_24dp"/>
 
     </LinearLayout>
 
