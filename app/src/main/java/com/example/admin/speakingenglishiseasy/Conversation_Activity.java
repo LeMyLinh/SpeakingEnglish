@@ -1,6 +1,7 @@
 package com.example.admin.speakingenglishiseasy;
 
 
+import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -14,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -21,14 +23,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -410,8 +415,10 @@ public class Conversation_Activity extends AppCompatActivity {
                 animationClick(v);
                 if (pathMp3 == null) {
                     if(examConnectInternet()){
-                        downloadMp3();
-                        imgDownload.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+                        if (haveStoragePermission()) {
+                            downloadMp3();
+                            imgDownload.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+                        }
                     }
                 }
             }
@@ -425,6 +432,36 @@ public class Conversation_Activity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            //you have the permission now.
+            imgDownload.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+            downloadMp3();
+        }
+    }
+
+
+    public  boolean haveStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.e("Permission error","You have permission");
+                return true;
+            } else {
+
+                Log.e("Permission error","You have asked for permission");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //you dont need to worry about these stuff below api level 23
+            Log.e("Permission error","You already have the permission");
+            return true;
+        }
     }
 
     private void downloadMp3() {
@@ -444,7 +481,6 @@ public class Conversation_Activity extends AppCompatActivity {
 
 
         examDowloadCompelete();
-
     }
 
     public void examDowloadCompelete() {
@@ -657,10 +693,10 @@ public class Conversation_Activity extends AppCompatActivity {
                 .setPositiveButton("Settings",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-
                                 dialog.cancel();
+
+                                Intent i = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                                startActivity(i);
                             }
                         }
                 )

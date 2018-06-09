@@ -215,13 +215,13 @@ public class Topic_Activity extends AppCompatActivity {
 
         } else if (id == R.id.nav_like) {
             isTopic = 2;
-            querySeLectAll();
-            addActionBar();
+            Intent intent = new Intent(Topic_Activity.this,Topic_Activity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_download) {
             isTopic = 3;
-            querySeLectAll();
-            addActionBar();
+            Intent intent = new Intent(Topic_Activity.this,Topic_Activity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
             shareApp();
