@@ -4,9 +4,6 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
-/**
- * Created by admin on 7/29/2017.
- */
 
 public class Subject implements Serializable {
     private String idSubject;

@@ -36,8 +36,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 
-
-
 public class Subject_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener   {
 

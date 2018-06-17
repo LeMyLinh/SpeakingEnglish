@@ -14,9 +14,6 @@ import com.example.admin.speakingenglishiseasy.R;
 
 import java.util.List;
 
-/**
- * Created by admin on 7/24/2017.
- */
 
 public class SubjectAdapter extends  ArrayAdapter<Subject> {
 

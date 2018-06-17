@@ -28,9 +28,6 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by admin on 7/26/2017.
- */
 
 public class ConversationAdapter extends ArrayAdapter<Conversation> {
 

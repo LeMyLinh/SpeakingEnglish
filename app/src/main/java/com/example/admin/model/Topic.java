@@ -2,10 +2,6 @@ package com.example.admin.model;
 
 import java.io.Serializable;
 
-/**
- * Created by admin on 7/25/2017.
- */
-
 public class Topic implements Serializable {
     private int idTopic;
     private String idSubject;

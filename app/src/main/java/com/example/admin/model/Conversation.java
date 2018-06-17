@@ -6,9 +6,6 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 
-/**
- * Created by admin on 7/26/2017.
- */
 
 public class Conversation implements Serializable {
     private  int idConversation;
